@@ -1,0 +1,19 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# ติดตั้งจาก lockfile/package เพื่อใช้ cache เมื่อ build
+COPY package*.json ./
+RUN npm ci
+
+# คัดลอกซอร์ส (จะถูก mount ทับด้วย volume ตอนรัน)
+COPY . .
+
+EXPOSE 5173
+
+# สำคัญ: ให้ watcher ทำงานดีบน Windows/VM และให้ dev server ฟังทุก interface
+ENV CHOKIDAR_USEPOLLING=true
+ENV HOST=0.0.0.0
+
+# รัน Vite dev server
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

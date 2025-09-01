@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"           # host:container
+    volumes:
+      - .:/app                # โค้ดบนเครื่อง -> ใน container
+      - /app/node_modules     # ใช้ node_modules ของ container เพื่อหลบ permission issue
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - HOST=0.0.0.0
