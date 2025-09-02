@@ -1,11 +1,30 @@
-function App() {
+import { useState } from "react";
+import Header from "./components/Header";
+import Bisection from "./components/methods/Bisection";
+import FalsePosition from "./components/methods/FalsePosition";
 
-  const name="React"
+function App() {
+  const [method, setMethod] = useState("");
+
+  const renderMethod = () => {
+    switch (method) {
+      case "bisection":
+        return <Bisection />;
+      case "falsePosition":
+        return <FalsePosition />;
+      default:
+        return (
+          <main style={{ padding: 16 }}>
+            <p>เลือกสูตรจากเมนูด้านบนก่อน</p>
+          </main>
+        );
+    }
+  };
 
   return (
     <>
-      <h1>Learning: {name}</h1>
-      <h4>Line 2</h4>
+      <Header value={method} onChange={setMethod} />
+      {renderMethod()}
     </>
   );
 }
