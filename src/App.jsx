@@ -1,5 +1,7 @@
 import { useState } from "react";
+import "./global.css"
 import Header from "./components/Header";
+import Test from "./components/methods/Test";
 import Bisection from "./components/methods/Bisection";
 import FalsePosition from "./components/methods/FalsePosition";
 
@@ -8,6 +10,8 @@ function App() {
 
   const renderMethod = () => {
     switch (method) {
+      case "test":
+        return <Test />;
       case "bisection":
         return <Bisection />;
       case "falsePosition":

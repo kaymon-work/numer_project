@@ -11,6 +11,7 @@ export default function Header({ value, onChange }) {
         style={styles.select}
       >
         <option value="">-- เลือกสูตร --</option>
+        <option value="test">Test</option>
         <option value="bisection">Bisection</option>
         <option value="falsePosition">False Position</option>
       </select>
