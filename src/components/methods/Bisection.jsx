@@ -1,47 +1,85 @@
 import { useState } from "react";
-import { evaluate } from "mathjs";
+import { create, all } from "mathjs";
+
+const math = create(all);
 
 export default function Bisection() {
-  const [fx, setFx] = useState("");   // เก็บข้อความสมการ
-  const [x, setX] = useState("");     // ค่า x ที่อยากทดสอบ
+  const [fx, setFx] = useState("");
+  const [xL, setXL] = useState("");
+  const [xR, setXR] = useState("");
+  const [tol, setTol] = useState("0.000001");
+  const [maxIter, setMaxIter] = useState("50");
   const [result, setResult] = useState(null);
 
-  const handleCalculate = () => {
-    try {
-      // แทนค่า x ลงในฟังก์ชัน
-      const value = evaluate(fx, { x: parseFloat(x) });
-      setResult(value);
-    } catch (err) {
-      setResult("Error: ตรวจสอบสูตรอีกครั้ง");
+  const Cal = () => {
+    let xl = parseFloat(xL);
+    let xr = parseFloat(xR);
+    const eps = parseFloat(tol);
+    const maxIt = parseInt(maxIter);
+
+    let xm = 0;
+    let xmOld = 0;
+    let error = 1;
+
+    for (let i = 1; i <= maxIt && error > eps; i++) {
+      xm = (xl + xr) / 2;
+      const fxl = math.evaluate(fx, { x: xl });
+      const fxm = math.evaluate(fx, { x: xm });
+
+      if (i > 1) {
+        error = Math.abs((xm - xmOld) / xm);
+      }
+      xmOld = xm;
+
+      if (fxm === 0) break;
+      if (fxl * fxm < 0) {
+        xr = xm;
+      } else {
+        xl = xm;
+      }
     }
+
+    setResult(xm);
   };
 
   return (
-    <div style={{ margin: "20px" }}>
-      <h2>Bisection Method - ใส่ f(x)</h2>
+    <div>
+      <h2>Bisection Method</h2>
 
-      {/* ช่องรับ f(x) */}
       <input
         type="text"
-        placeholder="เช่น x^3 - x - 2"
+        placeholder="f(x)"
         value={fx}
         onChange={(e) => setFx(e.target.value)}
-        style={{ marginRight: "10px" }}
       />
-
-      {/* ช่องรับค่า x */}
       <input
         type="number"
-        placeholder="ค่า x"
-        value={x}
-        onChange={(e) => setX(e.target.value)}
-        style={{ marginRight: "10px" }}
+        placeholder="xL"
+        value={xL}
+        onChange={(e) => setXL(e.target.value)}
       />
-
-      <button onClick={handleCalculate}>คำนวณ f(x)</button>
+      <input
+        type="number"
+        placeholder="xR"
+        value={xR}
+        onChange={(e) => setXR(e.target.value)}
+      />
+      <input
+        type="number"
+        placeholder="tolerance"
+        value={tol}
+        onChange={(e) => setTol(e.target.value)}
+      />
+      <input
+        type="number"
+        placeholder="max iteration"
+        value={maxIter}
+        onChange={(e) => setMaxIter(e.target.value)}
+      />
+      <button onClick={Cal}>Calculate</button>
 
       {result !== null && (
-        <p>f({x}) = {result}</p>
+        <h3>Result ≈ {result}</h3>
       )}
     </div>
   );
