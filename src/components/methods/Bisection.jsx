@@ -1,44 +1,48 @@
 import { useState } from "react";
+import { evaluate } from "mathjs";
 
-function Bisection() {
-  const [num1, setNum1] = useState("");
-  const [num2, setNum2] = useState("");
+export default function Bisection() {
+  const [fx, setFx] = useState("");   // เก็บข้อความสมการ
+  const [x, setX] = useState("");     // ค่า x ที่อยากทดสอบ
   const [result, setResult] = useState(null);
 
   const handleCalculate = () => {
-    const sum = Number(num1) + Number(num2);
-    setResult(sum);
+    try {
+      // แทนค่า x ลงในฟังก์ชัน
+      const value = evaluate(fx, { x: parseFloat(x) });
+      setResult(value);
+    } catch (err) {
+      setResult("Error: ตรวจสอบสูตรอีกครั้ง");
+    }
   };
 
   return (
-    <div className="container">
-      <h2>เครื่องคิดเลขบวกเลขง่ายๆ</h2>
+    <div style={{ margin: "20px" }}>
+      <h2>Bisection Method - ใส่ f(x)</h2>
 
+      {/* ช่องรับ f(x) */}
       <input
-        type="number"
-        placeholder="กรอกเลขตัวแรก"
-        value={num1}
-        onChange={(e) => setNum1(e.target.value)}
-        className="input-box"
+        type="text"
+        placeholder="เช่น x^3 - x - 2"
+        value={fx}
+        onChange={(e) => setFx(e.target.value)}
+        style={{ marginRight: "10px" }}
       />
 
+      {/* ช่องรับค่า x */}
       <input
         type="number"
-        placeholder="กรอกเลขตัวที่สอง"
-        value={num2}
-        onChange={(e) => setNum2(e.target.value)}
-        className="input-box"
+        placeholder="ค่า x"
+        value={x}
+        onChange={(e) => setX(e.target.value)}
+        style={{ marginRight: "10px" }}
       />
 
-      <button onClick={handleCalculate} className="button">
-        คำนวณ
-      </button>
+      <button onClick={handleCalculate}>คำนวณ f(x)</button>
 
       {result !== null && (
-        <h3 className="result">ผลลัพธ์: {result}</h3>
+        <p>f({x}) = {result}</p>
       )}
     </div>
   );
 }
-
-export default Bisection;

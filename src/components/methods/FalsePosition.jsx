@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function FalsePosition() {
+function FalsePosition() {
   const [num1, setNum1] = useState("");
   const [num2, setNum2] = useState("");
   const [result, setResult] = useState(null);
@@ -12,7 +12,7 @@ export default function FalsePosition() {
 
   return (
     <div className="container">
-      <h2>เครื่องคิดเลขบวกเลขง่ายๆ</h2>
+      <h2>บวกเลข</h2>
 
       <input
         type="number"
@@ -39,4 +39,6 @@ export default function FalsePosition() {
       )}
     </div>
   );
-};
+}
+
+export default FalsePosition;
